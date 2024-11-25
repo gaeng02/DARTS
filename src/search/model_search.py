@@ -157,16 +157,25 @@ class Network(nn.Module):
       PRIMITIVES = self.PRIMITIVES['primitives_normal' if normal else 'primitives_reduct']
 
       gene = []
-      n = 2
+      n = 2 # not changable. 
+      # Start node has 2 inputs, next node has 2+1(start node) inputs. So n is increased.
       start = 0
       for i in range(self._steps):
         end = start + n
         W = weights[start:end].copy()
 
-        try:
-          edges = sorted(range(i + 2), key=lambda x: -max(W[x][k] for k in range(len(W[x])) if k != PRIMITIVES[x].index('none')))[:2]
+        '''
+        checking current node weight
+        print("=== Weight ===")
+        print(f"steps :: {n}")
+        print(W)
+        print()
+        '''
+
+        try : # set to 3 or 4 without limiting to 2 paths
+          edges = sorted(range(i + 2), key=lambda x: -max(W[x][k] for k in range(len(W[x])) if k != PRIMITIVES[x].index('none')))[:3]
         except ValueError: # This error happens when the 'none' op is not present in the ops
-          edges = sorted(range(i + 2), key=lambda x: -max(W[x][k] for k in range(len(W[x]))))[:2]
+          edges = sorted(range(i + 2), key=lambda x: -max(W[x][k] for k in range(len(W[x]))))[:3]
 
         for j in edges:
           k_best = None
