@@ -187,7 +187,7 @@ class Network(nn.Module):
             else:
               if k_best is None or W[j][k] > W[j][k_best]:
                 k_best = k
-          gene.append((PRIMITIVES[start+j][k_best], j))
+          gene.append((n, PRIMITIVES[start+j][k_best], j, W[j][k_best])) # append node, weight
         start = end
         n += 1
       return gene
