@@ -15,6 +15,7 @@ import torchvision.datasets as dset
 import torch.backends.cudnn as cudnn
 from torch.autograd import Variable
 from torch.optim.lr_scheduler import CosineAnnealingLR
+import time
 
 sys.path.insert(0, '../RobustDARTS')
 
@@ -182,7 +183,12 @@ def infer(valid_queue, model, criterion):
         input = input.to(device)
         target = target.to(device)
 
+        start = time.time() # timer start 
         logits, _ = model(input)
+        end = time.time() # timer end
+
+        print(f"=== {end - start : .5f} sec === ") # time set
+        
         loss = criterion(logits, target)
 
         prec1, prec5 = utils.accuracy(logits, target, topk=(1, 5))
